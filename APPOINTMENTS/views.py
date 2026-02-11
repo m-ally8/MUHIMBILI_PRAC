@@ -11,6 +11,7 @@ class DoctorListView(generics.ListAPIView):
     queryset = Doctor.objects.all()
     serializer_class = DoctorListSerializer
 
+
 class AppointmentListView(generics.ListAPIView):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentListSerializer 
@@ -26,13 +27,12 @@ class AppointmentDetailsView(generics.RetrieveAPIView):
     serializer_class = AppointmentDetailSerializer
     lookup_field = 'id'
 
+
 class AppointmentCreateView(generics.CreateAPIView):
     serializer_class = AppointmentCreateSerializer
     
-
     def perform_create(self, serializer):
         serializer.save(patient=self.request.user, status='PENDING')
-
 
 
 class AppointmentDeleteView(generics.DestroyAPIView):
@@ -42,11 +42,10 @@ class AppointmentDeleteView(generics.DestroyAPIView):
     def get_queryset(self):
         return Appointment.objects.filter(patient = self.request.user)
 
+
 class AppointmentUpdateView(generics.UpdateAPIView):
     serializer_class = AppointmentUpdateSerializer
-
     lookup_field = 'id'
-    
     
     def get_queryset(self):
         return Appointment.objects.filter(patient=self.request.user)
