@@ -36,11 +36,12 @@ class Doctor(models.Model):
 
 
 class Appointment(models.Model):
-    STATUS_CHOICES = [
-        ('PENDING', 'Pending'),
-        ('COMPLETED', 'Completed'),
-        ('CANCELLED', 'Cancelled'),
-    ]
+    
+    class Status(models.TextChoices):
+        PENDING = "PENDING", "Pending"
+        APPROVED = "APPROVED", "Approved"
+        CANCELLED = "CANCELLED", "Cancelled"
+        COMPLETED = "COMPLETED", "Completed"
 
     patient = models.ForeignKey(
         User,
@@ -56,9 +57,9 @@ class Appointment(models.Model):
     time_slot = models.TimeField(max_length=20)
     status = models.CharField(
         max_length=20,
-        choices=STATUS_CHOICES,
-        default='PENDING'
+        choices=Status.choices,
+        default=Status.PENDING
     )
 
     def __str__(self):
-        return f"{self.patient.username} → {self.doctor}"
+        return f"{self.patient} → {self.doctor} - {self.date} - {self.time_slot}"
